@@ -1,0 +1,20 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    environment:
+      - TZ=Europe/Madrid
+    volumes:
+      - ./mosquitto_config:/mosquitto/config
+      - ./mosquitto_certs:/mosquitto/certs
+      - ./mosquitto_data:/mosquitto/data
+      - ./mosquitto_log:/mosquitto/log
+    ports:
+      - 8883:8883
+      - 1883:1883
+    restart: unless-stopped
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+    driver: bridge
