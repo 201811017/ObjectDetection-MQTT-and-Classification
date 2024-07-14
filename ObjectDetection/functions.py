@@ -29,7 +29,7 @@ def get_mask(frame1, frame2, kernel=np.array((9,9), dtype=np.uint8)):
     return mask
 
 def get_contour_detections(mask, thresh=400):
-    """ Obtains initial proposed detections from contours discoverd on the mask. 
+    """ Obtains initial proposed detections from contours discovered on the mask. 
         Scores are taken as the bbox area, larger is higher.
         Inputs:
             mask - thresholded image mask
@@ -101,7 +101,7 @@ def get_inter_area(box1, box2):
 
 def remove_contained_bboxes(boxes):
     """ Removes all smaller boxes that are contained within larger boxes.
-        Requires bboxes to be soirted by area (score)
+        Requires bboxes to be sorted by area (score)
         Inputs:
             boxes - array bounding boxes sorted (descending) by area 
                     [[x1,y1,x2,y2]]
@@ -191,7 +191,7 @@ def display_frame(frame):
     Display a frame in a window.
 
     Args:
-        frame: The frame to be displayed.
+        frame: frame to be displayed.
     """
     cv2.imshow("Frame", frame)
 
@@ -254,7 +254,6 @@ def get_video_info(cap):
     delay = int(1000 / get_fps(cap))
     print("Video Duration In Seconds:", duration(cap), "s")
 
-#function that calculates execution time
 def calculate_time(start_time, end_time):
     """
     Calculate the execution time in seconds.
