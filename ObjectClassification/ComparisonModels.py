@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 
 
 
-PATH_TO_PROMPTS_OPENAI = r"C:\Users\Maria\Documents\Surveillance\IntrusionDetection\ObjectClassification\cifar100_prompts.json"
-PATH_TO_PROMPTS_BLOOMLM= r"C:\Users\Maria\Documents\Surveillance\IntrusionDetection\ObjectClassification\cifar100-GPT-J.json"
+PATH_TO_PROMPTS_OPENAI = r"C:\Users\TFM\src\ObjectClassification\cifar100_prompts.json" #fill whith the cifar100_prompts.json full path
+PATH_TO_PROMPTS_BLOOMLM= r"C:\Users\TFM\src\ObjectClassification\cifar100-GPT-J.json" #fill whith the cifar100-GPT-J.json full path
 
 
 
@@ -179,7 +179,7 @@ if __name__ == "__main__":
     data_module = CIFAR100DataModule(train_batch_size=120, val_batch_size=120, test_batch_size=256, num_workers=11)
     
     wandb.login()#relogin=True)
-    wandb.init(project='NONOHJIO',
+    wandb.init(project='Model Comparison',
            job_type='benchmarking')
     models_to_test = [
     ('RN50', 'cc12m'), #Resnet50 model trained on 12 million captioned images
