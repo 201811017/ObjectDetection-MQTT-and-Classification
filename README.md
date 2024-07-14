@@ -3,6 +3,7 @@ Object Detection, transmission via MQTT and object classification
 
 ## Solution
 ![image](https://github.com/user-attachments/assets/a629c440-3d8a-4da2-8663-8b07fa85d311)
+
 The provided tool used to analyze surveillance camera recordings follows the next steps:
 1) Detecting objects in motion using object detection methods, which has noise related issues.
 2) Send this objec from the facilities to the Control Center. Assuming reliable communications between facilities and the Control Center with very low latency, detected objects with the motion detection algorithm will be sent through MQTT so as to be classified
