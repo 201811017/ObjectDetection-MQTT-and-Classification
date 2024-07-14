@@ -8,11 +8,8 @@ json_name = "cifar100-text-davinci-002.json"
 
 client = OpenAI(
     # This is the default and can be omitted
-    api_key="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",
+    api_key="your_own_API_Key",
 )
-
-# Define your input message here
-input_message = "Describe the weather forecast for tomorrow."
 
 
 
