@@ -1,5 +1,6 @@
 # DESIGN, DEVELOPMENT, AND CONSTRUCTION OF AN EVENT IDENTIFICATION SYSTEM BASED ON THE PROCESSING OF IMAGES OF DIFFERENT NATURES
 Collaborating Entity: ICAI – Universidad Pontificia Comillas.
+
 Date 17/07/2024
 
 This repository is for educational purposes as it is part of a Masther' Thesis.
