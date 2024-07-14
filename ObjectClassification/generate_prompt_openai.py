@@ -2,7 +2,7 @@ from openai import OpenAI
 import json
 from tqdm import tqdm
 
-json_name = "cifar100-GPT-J.json"
+json_name = "cifar100_prompts.json"
 
 
 
