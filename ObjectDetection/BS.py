@@ -16,6 +16,8 @@ else:
 # MQTT client setup
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1)
 broker_address = "127.0.0.1"
+
+#We could use also tls
 username = "BS"
 password = "tfm"
 client.username_pw_set(username, password)
@@ -35,7 +37,7 @@ def publish_image(image_str):
         print(f"MQTT publish error: {e}")
 
 # Video capture setup
-cap = cv2.VideoCapture(r"C:\CB051456.mp4")
+cap = cv2.VideoCapture(r"C:\CB051456.mp4") #path to the video
 
 while True:
     ret, frame = cap.read()
