@@ -176,7 +176,7 @@ class ProjectionHead(nn.Module):
     
 if __name__ == '__main__':  
 
-    PATH_TO_PROMPTS = r"C:\Users\Maria\Documents\Surveillance\IntrusionDetection\ObjectClassification\cifar100_prompts.json"
+    PATH_TO_PROMPTS = r"C:\Users\TFM\src\ObjectClassification\cifar100_prompts.json" #fill whith the cifar100_prompts.json full path
     with open(PATH_TO_PROMPTS) as f:
         gpt3_prompts = json.load(f)
     device = "cuda" if torch.cuda.is_available() else "cpu"  
@@ -289,15 +289,6 @@ if __name__ == '__main__':
                 text_embeddings = torch.stack(text_embeddings) #[batch, 768]
 
                 text_embeddings = text_projection(text_embeddings)
-
-
-                #i want in main to look at a random class embeding of that class 
-                #but i want just to look at a class and then each class has many descriptions, i only want to select one
-                #i want zeroshot to have all dexcriptions as i am going to backpropagate it, i want for each batch of data to look at an (image,target) => with the target i enter zeroshot and i ramdomly select a description => project that description and thats text embedding
-                #text_embeddings = text_projection(zeroshot_weights_gpt_both) #768
-                
-
-            
                 
                 logits = (text_embeddings @ image_embeddings.T) #logits are not the class indexes
                 logits.requires_grad_(True)  # Set requires_grad=True for the logits tensor
@@ -306,7 +297,6 @@ if __name__ == '__main__':
                 images_similarity = image_embeddings @ image_embeddings.T
                 texts_similarity = text_embeddings @ text_embeddings.T
 
-                #nfoNCE (Noise-Contrastive Estimation) loss
                 pred = F.softmax((images_similarity + texts_similarity) / 2, dim=-1)
                 pred.requires_grad_(True)
 
@@ -318,45 +308,22 @@ if __name__ == '__main__':
                 loss = (images_loss + texts_loss) / 2.0
 
 
-                #texts_loss = cross_entropy(logits, pred, reduction='none') #none as want to retain the gradient information for the loss with respect to each element in the batch
-                #images_loss = cross_entropy(logits.T, pred.T, reduction='none')
-                #loss =  (images_loss + texts_loss) / 2.0 # similar goal to negative log-likelihood
                 loss = loss.mean() #not the sum as i want the learning rate to be relatively insensitive to the batch size
                 loss.requires_grad_(True)
-                #total_train_loss += loss.item() * images.size(0) #weights the loss based on the batch size
                 total_train_loss += loss.item()
                 #as the text encoder is the one of the model, i am not calculating gradients for it
                 
-                #loss over a batch of samples,  a single scalar loss value that represents the average loss across the entire batch
                 # Backward pass and optimize
                 loss.backward()
-                optimizer.step()
-                
-                #Getting accuracy
-                predicted_topk_train = logits.topk(max(topk), 1, True, True)[1].t()  # Get top-k predicted labels
-                target_view_train = target.view(1, -1).expand_as(predicted_topk_train)
-                correct_train = predicted_topk_train.eq(target_view_train)
-                total_correct_predictions_train += correct_train.sum().item()
-                
-                            
+                optimizer.step()  
 
-            #average_train_loss = (total_train_loss / n_train) * 100
             average_train_loss = (total_train_loss / len(train_dataloader)) * 100
 
             average_train_losses.append(average_train_loss)
             wandb.log({ "train_loss_per_epoch": average_train_loss})
             print("Training loss: ", total_train_loss)
             print("Average training loss: ", average_train_loss)
-            
-            if total_correct_predictions_train > 0:
-                average_topk_accuracy = [float(total_correct_predictions_train / (n_train * k)) for k in topk]
-                wandb.log({ "average_train_top1_accuracy": average_topk_accuracy[0], "average_train_top5_accuracy": average_topk_accuracy[1] })
-                print("Top-1 accuracy: ", average_topk_accuracy[0], "Top-5 accuracy: ", average_topk_accuracy[1])
-            else:
-                # Handle potential cases where no correct predictions occur (e.g., log 0 accuracy)
-                wandb.log({ "average_train_top1_accuracy": 0.0, "average_train_top5_accuracy": 0.0 })
 
-            
             scheduler.step()
             # VALIDATION LOOP
             print ("Validation set")
@@ -374,9 +341,8 @@ if __name__ == '__main__':
 
                 image_features = image_encoder(images) 
                 image_embeddings = image_projection(image_features)
-                
-                
                 text_embeddings = []
+                
                 for class_index in target:
                     class_name = data_module.cifar_classes[int(class_index.item())]
                     descriptions_for_class = gpt3_prompts[class_name.replace('_', ' ')]
@@ -385,16 +351,12 @@ if __name__ == '__main__':
                     text_embeddings.append(text_embedding.squeeze()) 
                 text_embeddings = torch.stack(text_embeddings) 
                 text_embeddings = text_projection(text_embeddings)
-                
-
-                
 
                 logits = (text_embeddings @ image_embeddings.T)
                 logits.requires_grad_(True)  # Set requires_grad=True for the logits tensor
 
 
                 images_similarity = image_embeddings @ image_embeddings.T
-                
                 texts_similarity = text_embeddings @ text_embeddings.T
                 
 
@@ -410,47 +372,16 @@ if __name__ == '__main__':
                 
                 loss = loss.mean() #not the sum as i want the learning rate to be relatively insensitive to the batch size
                 loss.requires_grad_(True)
-                #total_val_loss += loss.item() * images.size(0)
                 total_val_loss += loss.item()
                 
                 loss.backward()
                 optimizer.step()
 
-                
-                #Getting accuracy
-                predicted_topk_val = logits.topk(max(topk), 1, True, True)[1].t()  # Get top-k predicted labels
-                target_view_val = target.view(1, -1).expand_as(predicted_topk_val)
-                correct_val = predicted_topk_val.eq(target_view_val)
-                total_correct_predictions_val += correct_val.sum().item()
-            
-            
-
             average_val_loss = (total_val_loss / len(val_dataloader)) * 100
-            # print(n_val)
-            # average_val_loss = total_val_loss / len(val_dataloader)
-            # print(average_val_loss)
-            #average_val_loss = total_val_loss.sum()  / len(val_dataloader)
-            #average_val_loss = (total_val_loss / n_val) * 100
 
-            
-            #num_batches = len(val_dataloader)
-
-            #average_val_loss = average_val_loss/num_batches
-
-            #average_val_losses.append(average_val_loss)
-            print("Validation loss: ", total_val_loss)
             print("Average validation loss: ", average_val_loss)
 
             wandb.log({ "val_loss_per_epoch": average_val_loss})
-            
-            #accuracy
-            if total_correct_predictions_val > 0:
-                average_topk_accuracy_val = [float(total_correct_predictions_val / (n_val * k)) for k in topk]
-                wandb.log({ "average_val_top1_accuracy": average_topk_accuracy_val[0], "average_val_top5_accuracy": average_topk_accuracy_val[1] })
-                print("Top-1 accuracy: ", average_topk_accuracy_val[0], "Top-5 accuracy: ", average_topk_accuracy_val[1])
-            else:
-                # Handle potential cases where no correct predictions occur (e.g., log 0 accuracy)
-                wandb.log({ "average_val_top1_accuracy": 0.0, "average_val_top5_accuracy": 0.0 })
             
             print(f"Epoch {epoch+1}, Training Loss: {total_train_loss/len(train_dataloader)}, Validation Loss: {total_val_loss/len(val_dataloader)}")
     
@@ -466,7 +397,7 @@ if __name__ == '__main__':
             # if average_val_loss < best_val_loss:
             #     best_val_loss = average_val_loss
             #     # Specify the path to save the model weights
-            #     directory = r'C:\Users\Maria\Documents\Surveillance\opencv\yolov9\model_weights\validation'
+            #     directory = r'C:\Users\TFM\src\ObjectClassification\model_weights\validation' #fill with appropiate full path
             #     os.makedirs(directory, exist_ok=True)
             #     best_save_path = os.path.join(directory, 'best_val_loss.pth')
             #     torch.save(model.state_dict(), best_save_path)
@@ -474,17 +405,19 @@ if __name__ == '__main__':
             #     print("Early stopping due to validation loss not decreasing")
             #     break
             # scheduler.step()
+
+        
         # Save the model and specify the epoch and the path 
         # Define the directory where the model weights will be saved
-        save_dir = r'C:\Users\Maria\Documents\Surveillance\opencv\yolov9\model_weights\train'
+        save_dir = r'C:\Users\TFM\src\ObjectClassification\model_weights\train' #fill with appropiate full path
         os.makedirs(save_dir, exist_ok=True)
-        # Construct the file path for saving model weights for each epoch
+        # File path for saving model weights for each epoch
         epoch_save_path = os.path.join(save_dir, f'model_weights_epoch{epoch}.pth')
         torch.save(model.state_dict(), epoch_save_path)
         
     #TEST LOOP
     # Load the saved model weights
-    model.load_state_dict(torch.load(r'C:\Users\Maria\Documents\Surveillance\opencv\yolov9\model_weights\validation\best_val_loss.pth'))
+    model.load_state_dict(torch.load(r'C:\Users\TFM\src\ObjectClassification\model_weights\validation\best_val_loss.pth')) #fill with appropiate full path
 
     
     models = CLIPModel(model, data_module, data_module.cifar_classes, batch_size=512)
