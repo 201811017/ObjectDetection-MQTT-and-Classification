@@ -3,8 +3,6 @@
 import cv2
 import numpy as np
 import cv2
-
-#import functions from Auxiliary/functions file
 from functions import getBGSubtractor, calculate_time
 
 def get_mask(frame1, frame2, kernel=np.array((9,9), dtype=np.uint8)):
