@@ -2,14 +2,10 @@
 # importing libraries
 import cv2
 import numpy as np
-
-#import functions from Auxiliary/functions file
 from functions import getBGSubtractor, calculate_time
 from FrameDifferencing import remove_contained_bboxes, non_max_suppression, draw_bboxes
 
 def get_flow_viz(flow):
-    """ Obtains BGR image to Visualize the Optical Flow 
-        """
     hsv = np.zeros((flow.shape[0], flow.shape[1], 3), dtype=np.uint8)
     hsv[..., 1] = 255
 
@@ -21,8 +17,8 @@ def get_flow_viz(flow):
     return rgb
     
 
-# Create a VideoCapture object and read from input file => CPU
-cap = cv2.VideoCapture("C:\CB041446.mp4")
+# Create a VideoCapture object
+cap = cv2.VideoCapture("C:\CB041446.mp4") #fill with appropiate path
 
 #define substractor
 fgbg = getBGSubtractor("MOG2")
