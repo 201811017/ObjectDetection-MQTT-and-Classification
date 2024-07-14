@@ -43,7 +43,7 @@ def infer_model():
     logs = []  # List to store image annotations for logging
     while True:
         try:
-            folder_path = r"C:\Users\Maria\Documents\Surveillance\opencv\yolov9\received_images"
+            folder_path = r"C:\Users\TFM\src\ObjectClassification\received_images" #fill with the full path where the folder of images received wants to be located
             if folder_path:
             # Process images from folder
                 for image_path in [os.path.join(folder_path, filename) for filename in os.listdir(folder_path)]:
@@ -103,13 +103,13 @@ def logits(image_features, zeroshot_weights):
 if __name__ == "__main__":  
     wandb.init(project='predicting')
     
-    model, preprocess,_ = open_clip.create_model_and_transforms('ViT-L-14', 'datacomp_xl_s13b_b90k')
+    model, preprocess,_ = open_clip.create_model_and_transforms('ViT-L-14', 'datacomp_xl_s13b_b90k') #another model could be used
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
-    PATH_TO_PROMPTS_OPENAI = r"C:\Users\Maria\Documents\Surveillance\IntrusionDetection\ObjectClassification\cifar100_prompts.json"
+    PATH_TO_PROMPTS_OPENAI = r"C:\Users\TFM\src\ObjectClassification\cifar100_prompts.json" #fill whith the cifar100_prompts.json full path
 
-    #model.load_state_dict(torch.load(r'C:\Users\Maria\Documents\Surveillance\opencv\yolov9\model_weights\validation\best_val_loss.pth'))
+    #model.load_state_dict(torch.load(r'C:\Users\TFM\src\ObjectClassification\model_weights\validation\best_val_loss.pth')) #fill with the full path
 
     data_module = CIFAR100DataModule(train_batch_size=120, val_batch_size=100, test_batch_size=100, num_workers=11)   
 
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     logs = []	
 
     global folder_path
-    folder_path = r"C:\Users\Maria\Documents\Surveillance\opencv\yolov9\received_images"
+    folder_path = r"C:\Users\TFM\src\ObjectClassification\received_images"
     last_action_time = time.time()
     infer_model()
 
