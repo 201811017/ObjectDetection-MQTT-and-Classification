@@ -176,7 +176,7 @@ class ProjectionHead(nn.Module):
     
 if __name__ == '__main__':  
 
-    PATH_TO_PROMPTS = r"C:\Users\TFM\src\ObjectClassification\cifar100_prompts.json" #fill whith the cifar100_prompts.json full path
+    PATH_TO_PROMPTS = r"C:\Users\TFM\ObjectClassification\cifar100_prompts.json" #fill whith the cifar100_prompts.json full path
     with open(PATH_TO_PROMPTS) as f:
         gpt3_prompts = json.load(f)
     device = "cuda" if torch.cuda.is_available() else "cpu"  
@@ -397,7 +397,7 @@ if __name__ == '__main__':
             # if average_val_loss < best_val_loss:
             #     best_val_loss = average_val_loss
             #     # Specify the path to save the model weights
-            #     directory = r'C:\Users\TFM\src\ObjectClassification\model_weights\validation' #fill with appropiate full path
+            #     directory = r'C:\Users\TFM\ObjectClassification\model_weights\validation' #fill with appropiate full path
             #     os.makedirs(directory, exist_ok=True)
             #     best_save_path = os.path.join(directory, 'best_val_loss.pth')
             #     torch.save(model.state_dict(), best_save_path)
@@ -409,7 +409,7 @@ if __name__ == '__main__':
         
         # Save the model and specify the epoch and the path 
         # Define the directory where the model weights will be saved
-        save_dir = r'C:\Users\TFM\src\ObjectClassification\model_weights\train' #fill with appropiate full path
+        save_dir = r'C:\Users\TFM\ObjectClassification\model_weights\train' #fill with appropiate full path
         os.makedirs(save_dir, exist_ok=True)
         # File path for saving model weights for each epoch
         epoch_save_path = os.path.join(save_dir, f'model_weights_epoch{epoch}.pth')
@@ -417,7 +417,7 @@ if __name__ == '__main__':
         
     #TEST LOOP
     # Load the saved model weights
-    model.load_state_dict(torch.load(r'C:\Users\TFM\src\ObjectClassification\model_weights\validation\best_val_loss.pth')) #fill with appropiate full path
+    model.load_state_dict(torch.load(r'C:\Users\TFM\ObjectClassification\model_weights\validation\best_val_loss.pth')) #fill with appropiate full path
 
     
     models = CLIPModel(model, data_module, data_module.cifar_classes, batch_size=512)
