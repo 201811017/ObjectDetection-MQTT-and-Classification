@@ -3,7 +3,7 @@ Object Detection, transmission via MQTT and object classification
 
 ## Solution
 <p align="center">
-  <img src="[http://some_place.com/image.png](https://github.com/user-attachments/assets/a629c440-3d8a-4da2-8663-8b07fa85d311)" />
+  <img src="https://github.com/user-attachments/assets/a629c440-3d8a-4da2-8663-8b07fa85d311" />
 </p>
 
 The provided tool used to analyze surveillance camera recordings follows the next steps:
