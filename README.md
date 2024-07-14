@@ -1,4 +1,9 @@
-# Object Detection, MQTT and Object Classification
+# DESIGN, DEVELOPMENT, AND CONSTRUCTION OF AN EVENT IDENTIFICATION SYSTEM BASED ON THE PROCESSING OF IMAGES OF DIFFERENT NATURES
+Collaborating Entity: ICAI – Universidad Pontificia Comillas.
+Date 17/07/2024
+
+This repository is for educational purposes as it is part of a Masther' Thesis.
+## Abstract
 In a context where the physical security of industrial facilities is increasingly important, the need for an automated solution for detecting and identifying intruders is crucial. 
 
 This project presents a scalable and reproducible approach to identify intruders in industrial installations through object detection in surveillance camera videos, transmitting these detections to a centralized cluster, and employing various deep learning (DL) models within the CLIP (Contrastive Language-Image Pre-Training) framework, complemented with large language models (LLM). 
