@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 
 
 
-PATH_TO_PROMPTS_OPENAI = r"C:\Users\TFM\src\ObjectClassification\cifar100_prompts.json" #fill whith the cifar100_prompts.json full path
-PATH_TO_PROMPTS_BLOOMLM= r"C:\Users\TFM\src\ObjectClassification\cifar100-GPT-J.json" #fill whith the cifar100-GPT-J.json full path
+PATH_TO_PROMPTS_OPENAI = r"C:\Users\TFM\ObjectClassification\cifar100_prompts.json" #fill whith the cifar100_prompts.json full path
+PATH_TO_PROMPTS_BLOOMLM= r"C:\Users\TFM\ObjectClassification\cifar100-GPT-J.json" #fill whith the cifar100-GPT-J.json full path
 
 
 
