@@ -68,7 +68,7 @@ def on_message(client, userdata, message):
         # Convert base64-decoded data to a PIL Image
         pil_img = Image.open(io.BytesIO(image_data))
         
-        folder_path = r"C:\Users\TFM\src\ObjectClassification\received_images" #fill with appropiate full path
+        folder_path = r"C:\Users\TFM\ObjectClassification\received_images" #fill with appropiate full path
 
 
         folder_path, image_url = save_image(pil_img, folder_path)
@@ -85,7 +85,7 @@ def on_message(client, userdata, message):
 
 if __name__ == "__main__":
     global folder_path
-    folder_path = r"C:\Users\TFM\src\ObjectClassification\received_images" #fill with appropiate full path
+    folder_path = r"C:\Users\TFM\ObjectClassification\received_images" #fill with appropiate full path
 
 
     timeout_duration = 10  # Timeout duration in seconds
